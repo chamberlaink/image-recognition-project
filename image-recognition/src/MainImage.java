@@ -43,29 +43,42 @@ public class MainImage {
 	 */
 	public static void readDisplayImage(final String strFilename) {
 		BufferedImage bfImage = null;
+		BufferedImage bfSubImage = null;
+		
 		JFrame frame = new JFrame("Satellite Image");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		File file = new File(strFilename);
+		File outputFile = new File("image.jpeg");
 		
 		try {
 			
 			bfImage = ImageIO.read(file);
+			bfSubImage = bfImage.getSubimage(0,0,30,30);
+			ImageIO.write(bfSubImage, "jpeg", outputFile);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		
-		ImageIcon imageIcon = new ImageIcon(bfImage);
+		// Displays the entire image
+		/*ImageIcon imageIcon = new ImageIcon(bfImage);
 		JLabel jLabel = new JLabel();
 		jLabel.setIcon(imageIcon);
 		frame.setPreferredSize(new Dimension(finalFrameWidth, finalFrameHeight));
-		frame.getContentPane().add(jLabel, BorderLayout.CENTER);
+		frame.getContentPane().add(jLabel, BorderLayout.CENTER);*/
+		
+		// Displays the 30 x 30 pixel image 
+		/*ImageIcon subImageIcon = new ImageIcon(bfSubImage);
+		JLabel subJLabel = new JLabel();
+		subJLabel.setIcon(subImageIcon);
+		frame.setPreferredSize(new Dimension(finalFrameWidth, finalFrameHeight));
+		frame.getContentPane().add(subJLabel, BorderLayout.CENTER);
 		
 		frame.pack();
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		frame.setVisible(true);*/
 		
 	}
 	
