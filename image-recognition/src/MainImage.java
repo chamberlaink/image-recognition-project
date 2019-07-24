@@ -1,13 +1,10 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 /*
@@ -23,8 +20,196 @@ import javax.swing.WindowConstants;
  * @author Keri Chamberlain
  */
 public class MainImage {
-	final static int finalFrameWidth = 1600;
-	final static int finalFrameHeight = 1200;
+	
+	protected static int g_intPositionX;
+	protected static int g_intPositionY;
+	protected static int g_intImageHeight;
+	protected static int g_intImageWidth;
+	
+	/*
+	 * Description: constructor for global variables  
+	 * 
+	 * Objectives:
+	 * 	- initializes all global variables 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 *
+	 */
+	public MainImage() {
+		
+		initialize(0, 0, 0, 0);
+	}
+	
+	/*
+	 * Description: setter method of position x
+	 * 
+	 * Objectives:
+	 * 	- sets global x to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intX local variable x
+	 *
+	 */
+	public void setX(int intX) {
+		g_intPositionX = intX;
+	}
+	
+	/*
+	 * Description: setter method of position y
+	 * 
+	 * Objectives:
+	 * 	- sets global y to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intY local variable y
+	 *
+	 */
+	public void setY(int intY) {
+		g_intPositionY = intY;
+	}
+	
+	/*
+	 * Description: setter method of image height 
+	 * 
+	 * Objectives:
+	 * 	- sets global height to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intHeight local variable height 
+	 *
+	 */
+	public static void setHeight(int intHeight) {
+		g_intImageHeight = intHeight;
+	}
+	
+	/*
+	 * Description: setter method of image width 
+	 * 
+	 * Objectives:
+	 * 	- sets global width to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intWidth local variable width 
+	 *
+	 */
+	public static void setWidth(int intWidth) {
+		g_intImageWidth = intWidth;
+	}
+	
+	/*
+	 * Description: getter method of position x
+	 * 
+	 * Objectives:
+	 * 	- returns global position x
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intPositionX global position x
+	 *
+	 */
+	public int getX() {
+		return g_intPositionX;
+	}
+	
+	/*
+	 * Description: getter method of position y
+	 * 
+	 * Objectives:
+	 * 	- returns global position y
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intPositionY global position y
+	 *
+	 */
+	public int getY() {
+		return g_intPositionY;
+	}
+	
+	/*
+	 * Description: getter method of image height
+	 * 
+	 * Objectives:
+	 * 	- returns global image height 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intImageHeight global image height 
+	 *
+	 */
+	public int getHeight() {
+		return g_intImageHeight;
+	}
+	
+	/*
+	 * Description: getter method of image width
+	 * 
+	 * Objectives:
+	 * 	- returns global image width 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intImageWidth global image width 
+	 *
+	 */
+	public int getWidth() {
+		return g_intImageWidth;
+	}
+	
+	/*
+	 * Description: can be called from any method to initialize global variables 
+	 * 
+	 * Objectives:
+	 * 	- sets local variables to global to give them values  
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intX position x
+	 * @param intY position y
+	 * @param intHeight image height
+	 * @param intWidth image width
+	 *
+	 */
+	public void initialize(int intX, int intY, int intHeight, int intWidth) {
+		g_intPositionX = intX;
+		g_intPositionY = intY;
+		g_intImageHeight = intHeight;
+		g_intImageWidth = intWidth;
+	}
 	
 	/*
 	 * Description: This method reads an image passed in and then displays it in a window 
@@ -32,53 +217,39 @@ public class MainImage {
 	 * Objectives:
 	 * 	- read an image from input through command line
 	 * 	- converts it to a BufferedImage
-	 * 	- converts it to an imageIcon
 	 * 
 	 * Changes
 	 * 	7/11/2019: method created
+	 * 	7/23/2019: Setting an image to be saved by it's x and y position
+	 * 	7/24/2019: Getting the image height and width and looping through the image 
 	 * 
 	 * @author Keri Chamberlain
 	 * 
 	 * @param strFilename which is a file name of image 
 	 */
-	public static void readDisplayImage(final String strFilename) {
+	public static void readSaveImage(final String strFilename) {
 		BufferedImage bfImage = null;
 		BufferedImage bfSubImage = null;
 		
-		JFrame frame = new JFrame("Satellite Image");
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
 		File file = new File(strFilename);
-		File outputFile = new File("image.jpeg");
+		File outputFile = new File("X" + g_intPositionX + "Y" + g_intPositionY + ".jpeg");
 		
 		try {
 			
 			bfImage = ImageIO.read(file);
-			bfSubImage = bfImage.getSubimage(0,0,30,30);
+			
+			setHeight(bfImage.getHeight());
+			setWidth(bfImage.getWidth());
+			System.out.println("Image Height: " + g_intImageHeight + " Image Width: " + g_intImageWidth);
+			
+			bfSubImage = bfImage.getSubimage(g_intPositionX,g_intPositionY,30,30);
 			ImageIO.write(bfSubImage, "jpeg", outputFile);
 			
 		}catch(Exception e) {
+			System.out.println("No Image");
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		// Displays the entire image
-		/*ImageIcon imageIcon = new ImageIcon(bfImage);
-		JLabel jLabel = new JLabel();
-		jLabel.setIcon(imageIcon);
-		frame.setPreferredSize(new Dimension(finalFrameWidth, finalFrameHeight));
-		frame.getContentPane().add(jLabel, BorderLayout.CENTER);*/
-		
-		// Displays the 30 x 30 pixel image 
-		/*ImageIcon subImageIcon = new ImageIcon(bfSubImage);
-		JLabel subJLabel = new JLabel();
-		subJLabel.setIcon(subImageIcon);
-		frame.setPreferredSize(new Dimension(finalFrameWidth, finalFrameHeight));
-		frame.getContentPane().add(subJLabel, BorderLayout.CENTER);
-		
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);*/
 		
 	}
 	
@@ -98,7 +269,7 @@ public class MainImage {
 	 */
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		readDisplayImage(args[0]);
+		readSaveImage(args[0]);
 	}
 
 }
