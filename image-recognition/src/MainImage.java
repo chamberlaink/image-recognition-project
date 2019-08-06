@@ -25,6 +25,8 @@ public class MainImage {
 	protected static int g_intPositionY;
 	protected static int g_intImageHeight;
 	protected static int g_intImageWidth;
+	protected static int g_intSubImageHeight;
+	protected static int g_intSubImageWidth;
 	
 	/*
 	 * Description: constructor for global variables  
@@ -40,7 +42,7 @@ public class MainImage {
 	 */
 	public MainImage() {
 		
-		initialize(0, 0, 0, 0);
+		initialize(0, 0, 0, 0, 0, 0);
 	}
 	
 	/*
@@ -57,7 +59,7 @@ public class MainImage {
 	 * @param intX local variable x
 	 *
 	 */
-	public void setX(int intX) {
+	public static void setX(int intX) {
 		g_intPositionX = intX;
 	}
 	
@@ -115,6 +117,42 @@ public class MainImage {
 		g_intImageWidth = intWidth;
 	}
 	
+	/*
+	 * Description: setter method of sub image height 
+	 * 
+	 * Objectives:
+	 * 	- sets global sub height to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intSubHeight local variable height 
+	 *
+	 */
+	public static void setSubHeight(int intSubHeight) {
+		g_intSubImageHeight = intSubHeight;
+	}
+	
+	/*
+	 * Description: setter method of sub image width 
+	 * 
+	 * Objectives:
+	 * 	- sets global sub width to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intSubWidth local variable width 
+	 *
+	 */
+	public static void setSubWidth(int intSubWidth) {
+		g_intSubImageWidth = intSubWidth;
+	}
+
 	/*
 	 * Description: getter method of position x
 	 * 
@@ -188,6 +226,42 @@ public class MainImage {
 	}
 	
 	/*
+	 * Description: getter method of sub image height
+	 * 
+	 * Objectives:
+	 * 	- returns global sub image height 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intSubImageHeight global sub image height 
+	 *
+	 */
+	public int getSubHeight() {
+		return g_intSubImageHeight;
+	}
+	
+	/*
+	 * Description: getter method of sub image width
+	 * 
+	 * Objectives:
+	 * 	- returns global sub image width 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intSubImageWidth global sub image width 
+	 *
+	 */
+	public int getSubWidth() {
+		return g_intImageWidth;
+	}
+	
+	/*
 	 * Description: can be called from any method to initialize global variables 
 	 * 
 	 * Objectives:
@@ -202,13 +276,18 @@ public class MainImage {
 	 * @param intY position y
 	 * @param intHeight image height
 	 * @param intWidth image width
+	 * @param intSubHeight sub image height
+	 * @param intSubWidth sub image width
 	 *
 	 */
-	public void initialize(int intX, int intY, int intHeight, int intWidth) {
+	public void initialize(int intX, int intY, int intHeight, int intWidth, int intSubHeight, int intSubWidth) {
 		g_intPositionX = intX;
 		g_intPositionY = intY;
 		g_intImageHeight = intHeight;
 		g_intImageWidth = intWidth;
+		g_intSubImageHeight = intSubHeight;
+		g_intSubImageWidth = intSubWidth;
+		
 	}
 	
 	/*
@@ -222,6 +301,7 @@ public class MainImage {
 	 * 	7/11/2019: method created
 	 * 	7/23/2019: Setting an image to be saved by it's x and y position
 	 * 	7/24/2019: Getting the image height and width and looping through the image 
+	 * 	8/5/2019: Every image is divided by 30x30 pixel with remaining amount (when it is odd) is portioned out as well
 	 * 
 	 * @author Keri Chamberlain
 	 * 
@@ -230,20 +310,50 @@ public class MainImage {
 	public static void readSaveImage(final String strFilename) {
 		BufferedImage bfImage = null;
 		BufferedImage bfSubImage = null;
+		int intTempHeight = 0;
+		int intTempWidth = 0;
 		
 		File file = new File(strFilename);
-		File outputFile = new File("X" + g_intPositionX + "Y" + g_intPositionY + ".jpeg");
+		File outputFile;
 		
 		try {
 			
 			bfImage = ImageIO.read(file);
 			
-			setHeight(bfImage.getHeight());
-			setWidth(bfImage.getWidth());
-			System.out.println("Image Height: " + g_intImageHeight + " Image Width: " + g_intImageWidth);
+			intTempHeight = bfImage.getHeight();
+			intTempWidth = bfImage.getWidth();
+			setSubHeight(30);
+			setSubWidth(30);
+			setHeight(intTempHeight - g_intSubImageHeight);
+			setWidth(intTempWidth - g_intSubImageWidth);
 			
-			bfSubImage = bfImage.getSubimage(g_intPositionX,g_intPositionY,30,30);
-			ImageIO.write(bfSubImage, "jpeg", outputFile);
+			System.out.println("Image Height: " + g_intImageHeight + " Image Width: " + g_intImageWidth);
+			System.out.println("SubImage Height: " + g_intSubImageHeight + " SubImage Width: " + g_intSubImageWidth);
+			
+			for(g_intPositionY = 0; g_intPositionY <= g_intImageHeight; g_intPositionY+=g_intSubImageHeight) {
+				for(g_intPositionX = 0; g_intPositionX <= g_intImageWidth; g_intPositionX+=g_intSubImageWidth) {
+				
+					outputFile = new File("X" + g_intPositionX + "Y" + g_intPositionY + ".jpeg");
+					bfSubImage = bfImage.getSubimage(g_intPositionX,g_intPositionY,g_intSubImageWidth,g_intSubImageHeight);
+					ImageIO.write(bfSubImage, "jpeg", outputFile);
+				
+				}
+			}
+			
+			
+			System.out.println("Final X Position: " + g_intPositionX);
+			System.out.println("Final Y Position: " + g_intPositionY);
+			
+			if(g_intPositionX < intTempWidth && g_intPositionY < intTempHeight) {
+				
+				setSubWidth((intTempWidth - g_intPositionX));
+				setSubHeight((intTempHeight - g_intPositionY));
+				
+				outputFile = new File("X" + g_intPositionX + "Y" + g_intPositionY + ".jpeg");
+				bfSubImage = bfImage.getSubimage(g_intPositionX,g_intPositionY,g_intSubImageWidth,g_intSubImageHeight);
+				ImageIO.write(bfSubImage, "jpeg", outputFile);
+			}
+			
 			
 		}catch(Exception e) {
 			System.out.println("No Image");
