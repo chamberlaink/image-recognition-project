@@ -77,7 +77,7 @@ public class MainImage {
 	 * @param intY local variable y
 	 *
 	 */
-	public void setY(int intY) {
+	public static void setY(int intY) {
 		g_intPositionY = intY;
 	}
 	
@@ -340,19 +340,15 @@ public class MainImage {
 				}
 			}
 			
+			setX(intTempWidth - g_intSubImageWidth);
+			setY(intTempHeight - g_intSubImageHeight);
+			
+			outputFile = new File("X" + g_intPositionX + "Y" + g_intPositionY + ".jpeg");
+			bfSubImage = bfImage.getSubimage(g_intPositionX,g_intPositionY,g_intSubImageWidth,g_intSubImageHeight);
+			ImageIO.write(bfSubImage, "jpeg", outputFile);
 			
 			System.out.println("Final X Position: " + g_intPositionX);
 			System.out.println("Final Y Position: " + g_intPositionY);
-			
-			if(g_intPositionX < intTempWidth && g_intPositionY < intTempHeight) {
-				
-				setSubWidth((intTempWidth - g_intPositionX));
-				setSubHeight((intTempHeight - g_intPositionY));
-				
-				outputFile = new File("X" + g_intPositionX + "Y" + g_intPositionY + ".jpeg");
-				bfSubImage = bfImage.getSubimage(g_intPositionX,g_intPositionY,g_intSubImageWidth,g_intSubImageHeight);
-				ImageIO.write(bfSubImage, "jpeg", outputFile);
-			}
 			
 			
 		}catch(Exception e) {
