@@ -2,6 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -27,6 +28,7 @@ public class MainImage {
 	protected static int g_intImageWidth;
 	protected static int g_intSubImageHeight;
 	protected static int g_intSubImageWidth;
+	protected static int g_intOverlap;
 	
 	/*
 	 * Description: constructor for global variables  
@@ -42,7 +44,25 @@ public class MainImage {
 	 */
 	public MainImage() {
 		
-		initialize(0, 0, 0, 0, 0, 0);
+		initialize(0, 0, 0, 0, 0, 0, 0);
+	}
+	
+	/*
+	 * Description: setter method of overlap
+	 * 
+	 * Objectives:
+	 * 	- sets global intOverlap to it's local variable 
+	 * 
+	 * Changes
+	 * 	7/24/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @param intOverlap local variable 
+	 *
+	 */
+	public static void setOverlap(int intOverlap) {
+		g_intOverlap = intOverlap;
 	}
 	
 	/*
@@ -52,7 +72,7 @@ public class MainImage {
 	 * 	- sets global x to it's local variable 
 	 * 
 	 * Changes
-	 * 	7/24/2019: method created 
+	 * 	8/13/2019: method created 
 	 * 
 	 * @author Keri Chamberlain
 	 * 
@@ -151,6 +171,25 @@ public class MainImage {
 	 */
 	public static void setSubWidth(int intSubWidth) {
 		g_intSubImageWidth = intSubWidth;
+	}
+	
+	/*
+	 * Description: getter method of overlap
+	 * 
+	 * Objectives:
+	 * 	- returns global overlap
+	 * 
+	 * Changes
+	 * 	8/13/2019: method created 
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 * @return g_intOverlap global variable overlap
+	 *
+	 */
+	
+	public int getOverlap() {
+		return g_intOverlap;
 	}
 
 	/*
@@ -278,15 +317,64 @@ public class MainImage {
 	 * @param intWidth image width
 	 * @param intSubHeight sub image height
 	 * @param intSubWidth sub image width
+	 * @param intOverlap overlap on image chosen by user 
 	 *
 	 */
-	public void initialize(int intX, int intY, int intHeight, int intWidth, int intSubHeight, int intSubWidth) {
+	public void initialize(int intX, int intY, int intHeight, int intWidth, int intSubHeight, int intSubWidth, int intOverlap) {
 		g_intPositionX = intX;
 		g_intPositionY = intY;
 		g_intImageHeight = intHeight;
 		g_intImageWidth = intWidth;
 		g_intSubImageHeight = intSubHeight;
 		g_intSubImageWidth = intSubWidth;
+		g_intOverlap = intOverlap;
+		
+	}
+	
+	/*
+	 * Description: This method gives a percent of overlap for each image, chosen by the user
+	 * 
+	 * Objectives:
+	 * 	- reads the users choice of overlap
+	 * 	- user can choose an overlap of 0, 25, or 50 pixels
+	 * 
+	 * Changes
+	 * 	8/13/2019: method created
+	 * 
+	 * @author Keri Chamberlain
+	 * 
+	 */
+	
+	public static void imageOverlap() {
+		
+		int intOverlapPercentage = 0;
+		
+		Scanner scanInput = new Scanner(System.in);
+		
+		System.out.println("Enter Percentage (0, 25, or 50) of overlap: ");
+		intOverlapPercentage = scanInput.nextInt();
+		
+		switch(intOverlapPercentage) {
+		case 0:
+			System.out.println("The overlap entered is 0");
+			setOverlap(0);
+			break;
+		case 25:
+			System.out.println("The overlap entered is 25");
+			setOverlap(25);
+			break;
+		case 50:
+			System.out.println("The overlap entered is 50");
+			setOverlap(50);
+			break;
+		default:
+			System.out.println("Invalid Input");
+			break;
+			
+		}
+		
+		scanInput.close();
+		
 		
 	}
 	
@@ -375,7 +463,9 @@ public class MainImage {
 	 */
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		readSaveImage(args[0]);
+		
+		imageOverlap();
+		//readSaveImage(args[0]);
 	}
 
 }
